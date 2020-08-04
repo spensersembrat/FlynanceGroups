@@ -15,7 +15,7 @@ import Product from './components/Product';
 import Dashboard from './components/Dashboard';
 import Calculator from './components/Calculator';
 
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, Hub } from 'aws-amplify';
 import { Row, Col, Container } from 'react-bootstrap';
 import { AmplifyAuthenticator, withAuthenticator, AmplifySignUp, AmplifySignIn} from '@aws-amplify/ui-react';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
@@ -23,17 +23,22 @@ import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
 
 function App() {
-  const [authState, setAuthState] = React.useState();
-    const [user, setUser] = React.useState();
+  const [user, updateUser] = React.useState(null);
+  React.useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then(user => updateUser(user))
+      .catch(() => console.log('No signed in user.'));
+    Hub.listen('auth', data => {
+      switch (data.payload.event) {
+        case 'signIn':
+          return updateUser(data.payload.data);
+        case 'signOut':
+          return updateUser(null);
+      }
+    });
+  }, []);
 
-    React.useEffect(() => {
-        return onAuthUIStateChange((nextAuthState, authData) => {
-            setAuthState(nextAuthState);
-            setUser(authData)
-        });
-    }, []);
-
-  const flynanceApp = authState === AuthState.SignedIn && user ? (
+  const flynanceApp = user ? (
       <Dashboard />
     ) : (
       <Container>
