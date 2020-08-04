@@ -1,0 +1,9 @@
+.payments-container {
+  min-height: 500px;
+  max-width: 418px;
+  border: 1px solid #A5C9FF;
+  border-radius: 7px;
+  margin: 20px 0;
+  padding: 20px;
+  box-shadow: 0px 3px 16px lightgrey;
+}

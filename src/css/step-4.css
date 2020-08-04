@@ -1,0 +1,6 @@
+.picker-input > input {
+    height: 70px !important;
+    width: 350px !important;
+    border-radius: 40px 40px 40px 0 !important;
+    padding: 20px !important;
+}

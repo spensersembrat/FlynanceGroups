@@ -1,0 +1,14 @@
+.flynance-nav {
+  background-color: #6ea3ff;
+  border-top-right-radius: 40px;
+  border-bottom-right-radius: 40px;
+  padding: 50px 0;
+  padding-left: 20px;
+  width: 225px;
+}
+
+.flynance-nav .nav-link {
+  color: #fff;
+  margin: 0 auto;
+  font-weight: bold;
+}

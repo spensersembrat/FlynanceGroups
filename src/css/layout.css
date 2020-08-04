@@ -1,0 +1,27 @@
+.dashboard-wrapper {
+  padding: 90px 50px 100px 0;
+  height: 100vh;
+}
+
+a {
+  color: #00B7FF;
+}
+
+:root {
+  --amplify-primary-color: #6EA3FF;
+  --amplify-primary-tint: #D74C6F;
+  --amplify-primary-shade: #D74C6F;
+}
+
+
+@media only screen and (max-width: 600px) {
+  .dashboard-wrapper {
+  padding: 0;
+  height: 100vh;
+}
+}
+
+
+.booktripbutton {
+  padding-right: 20px;
+}

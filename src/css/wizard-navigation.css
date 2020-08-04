@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap');
+
+
+.wizard-nav {
+    background-color: transparent;
+    height: 100px;
+}
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 148px;
+  max-height: 90px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 12px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.highlight {
+  text-decoration: underline;
+}
+
+
+.logo {
+    font-family: 'Open Sans', sans-serif;
+}
+
+@media screen and (max-width: 571px) {
+    .groupslogo {
+        display: none !important;
+    }
+}
+
+.groupslogo {
+  width: 30%;
+  opacity: 0.9;
+}
+
+@media screen and (min-width: 375px)  {
+        .mobile-break { display: none; }
+    }
+
+.menu-nav {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+
+.link {
+  text-decoration: none;
+  color: gray;
+  padding-top: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+
+.link-login {
+  text-decoration:none;
+  color: gray;
+  padding-top: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 10px;
+}

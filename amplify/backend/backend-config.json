@@ -1,0 +1,11 @@
+{
+	"api": {},
+	"auth": {
+		"flynancegroupsclient2b5a7350": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [],
+			"customAuth": false
+		}
+	}
+}

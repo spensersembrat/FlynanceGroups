@@ -1,0 +1,49 @@
+.illustration {
+    width: 100%;
+}
+.wizard-wrapper {
+    height: 100vh;
+    overflow: hidden;
+}
+.step-wrapper {
+    padding: 80px 0;
+}
+.btn-primary {
+    background-color: #D74C6F;
+    border-color: #D74C6F;
+    color: #fff !important;
+    padding: 10px;
+    width: 150px;
+    border-radius: 40px;
+    text-align:center !important;
+}
+
+.btn-primary-rounded {
+    background-color: #D74C6F;
+    color: #fff !important;
+    border-radius: 40px 40px 40px 0;
+    padding: 15px;
+    width: 170px;
+    text-align:center !important;
+}
+
+.step-input {
+    height: 70px !important;
+    width: 350px !important;
+    border-radius: 40px 40px 40px 0 !important;
+    padding: 20px !important;
+}
+
+form {
+    margin: 20px 0;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+  .calendar__item {
+    display: block !important;
+}
+}

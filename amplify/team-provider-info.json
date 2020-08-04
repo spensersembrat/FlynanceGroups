@@ -1,0 +1,38 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-flynancegroupsclient-dev-100306-authRole",
+            "UnauthRoleArn": "arn:aws:iam::661808229720:role/amplify-flynancegroupsclient-dev-100306-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::661808229720:role/amplify-flynancegroupsclient-dev-100306-authRole",
+            "Region": "us-west-2",
+            "DeploymentBucketName": "amplify-flynancegroupsclient-dev-100306-deployment",
+            "UnauthRoleName": "amplify-flynancegroupsclient-dev-100306-unauthRole",
+            "StackName": "amplify-flynancegroupsclient-dev-100306",
+            "StackId": "arn:aws:cloudformation:us-west-2:661808229720:stack/amplify-flynancegroupsclient-dev-100306/c82485a0-9abb-11ea-af61-0a52752701a6",
+            "AmplifyAppId": "d3pq63g7lm0o2h"
+        },
+        "categories": {
+            "auth": {
+                "flynancegroupsclient2b5a7350": {}
+            }
+        }
+    },
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-flynancegroupsclient-prod-102512-authRole",
+            "UnauthRoleArn": "arn:aws:iam::814748524551:role/amplify-flynancegroupsclient-prod-102512-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::814748524551:role/amplify-flynancegroupsclient-prod-102512-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "amplify-flynancegroupsclient-prod-102512-deployment",
+            "UnauthRoleName": "amplify-flynancegroupsclient-prod-102512-unauthRole",
+            "StackName": "amplify-flynancegroupsclient-prod-102512",
+            "StackId": "arn:aws:cloudformation:us-east-1:814748524551:stack/amplify-flynancegroupsclient-prod-102512/aa8cf1e0-b63f-11ea-b4a9-126c97cb5bc1",
+            "AmplifyAppId": "d81cbq1v44bvq"
+        },
+        "categories": {
+            "auth": {
+                "flynancegroupsclient2b5a7350": {}
+            }
+        }
+    }
+}
