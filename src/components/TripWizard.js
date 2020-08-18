@@ -70,7 +70,7 @@ class TripWizard extends React.Component {
         });
     }
 
-    async handleGroupSubmit(callback) {
+    handleGroupSubmit = async (callback) => {
         console.log(this.state);
         if (!this.state.startDate || !this.state.endDate) {
             return callback('no dates', null);
