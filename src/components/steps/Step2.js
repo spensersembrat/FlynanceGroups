@@ -29,15 +29,15 @@ class Step2 extends React.Component {
       [evt.target.name]: value
     });
   }
-  componentDidUpdate() {
-    if (this.props.currentStep === 2 && !this.state.code) {
-      Auth.currentSession()
-        .then(data => {
-          return this.props.goToStep(3);
-        })
-        .catch(err => console.log(err));
-    }
-  }
+  // componentDidUpdate() {
+  //   if (this.props.currentStep === 2 && !this.state.code) {
+  //     Auth.currentSession()
+  //       .then(data => {
+  //         return this.props.goToStep(3);
+  //       })
+  //       .catch(err => console.log(err));
+  //   }
+  // }
 
   confirmEmail(event) {
     event.preventDefault();

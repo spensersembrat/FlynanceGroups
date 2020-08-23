@@ -25,13 +25,13 @@ class TripWizard extends React.Component {
         travelingTo: '',
         startDate: null,
         endDate: null,
-        step: 1,
         flightUpload: null,
         flightCost: 0,
         birthday: 0,
         nationality: '',
+        clientSecret: '',
 
-        isSolo: false,
+        isSolo: null,
     }
 
     startTripWizard() {
@@ -54,7 +54,37 @@ class TripWizard extends React.Component {
     }
 
     handleLinkFlightSubmit = ({ flightUpload, flightCost }) => {
-        this.setState({ flightUpload, flightCost });
+        const paymentCost = flightCost / 4
+        this.setState({ flightUpload, flightCost, paymentCost });
+        this.generatePaymentIntent(paymentCost);
+    }
+
+    generatePaymentIntent = async (amount) => {
+        const data = await Auth.currentSession()
+            .then(data => {
+                return data;
+            })
+            .catch(err => console.log(err));
+
+        let accessToken = data.getAccessToken()
+        let jwt = accessToken.getJwtToken()
+
+        fetch("/api/users/payment-intent", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'flynance-token': jwt
+            },
+            body: JSON.stringify({
+                amount: amount * 100
+            })
+        })
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                this.setState({ clientSecret: data.clientSecret });
+            });
     }
 
     handleLocationSubmit = (location) => {
@@ -63,19 +93,47 @@ class TripWizard extends React.Component {
         });
     }
 
-    handleDateChanged = (start, end) => {
+    handleDateSubmit = (start, end) => {
         this.setState({
             startDate: start,
             endDate: end
         });
     }
 
-    handleGroupSubmit = async (callback) => {
-        console.log(this.state);
-        if (!this.state.startDate || !this.state.endDate) {
-            return callback('no dates', null);
-        }
+    handleSoloSubmit = async (callback) => {
+        const data = await Auth.currentSession()
+            .then(data => {
+                return data;
+            })
+            .catch(err => console.log(err));
 
+        let accessToken = data.getAccessToken()
+        let jwt = accessToken.getJwtToken();
+
+        const { travelingTo, startDate, endDate, nationality, birthday, flightUpload } = this.state;
+        const formData = new FormData();
+        formData.append('flightUpload', flightUpload, flightUpload.name);
+        formData.append('travelingTo', travelingTo);
+        formData.append('startDate', startDate);
+        formData.append('endDate', endDate);
+        formData.append('birthday', birthday);
+        formData.append('nationality', nationality);
+
+        fetch('/api/trips', {
+            method: 'POST',
+            headers: {
+                'flynance-token': jwt,
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(async data => {
+                console.log(data)
+            });
+    }
+
+    handleGroupSubmit = async (startDate, endDate) => {
+        this.setState({ startDate, endDate });
         const data = await Auth.currentSession()
             .then(data => {
                 return data;
@@ -92,24 +150,43 @@ class TripWizard extends React.Component {
             },
             body: JSON.stringify({
                 travelingTo: this.state.travelingTo,
-                startDate: this.state.startDate,
-                endDate: this.state.endDate
+                startDate: startDate,
+                endDate: endDate
             })
         })
             .then(response => response.json())
             .then(async data => {
                 console.log(data)
-                await Auth.signOut();
                 window.location.href = '/app/travelers';
             });
     }
 
     render() {
         const background = window.innerWidth <= 760 ? '' : 'url(' + backgroundImage + ')';
-        const { isSolo } = this.state;
+        const { isSolo, clientSecret, paymentCost } = this.state;
+        const { user } = this.props;
+        let content;
+
+        if (isSolo === null) {
+            content = <Step1 setIsSolo={(isSolo) => this.setState({ isSolo })} />;
+        } else {
+            if (!user) {
+                content = <Step2 />;
+            } else {
+                content = <StepWizard>
+                    {isSolo ? <Step2bBirthday handleBirthdaySubmit={this.handleBirthdaySubmit} /> : null}
+                    <Step3 handleLocationSubmit={this.handleLocationSubmit} />
+                    {isSolo ? <Step4 handleDateSubmit={this.handleDateSubmit} /> :
+                        <Step4 handleDateSubmit={this.handleGroupSubmit} handleSubmit={this.handleGroupSubmit} />}
+                    {isSolo ? <Step5LinkFlight handleLinkFlightSubmit={this.handleLinkFlightSubmit} /> : null}
+                    {isSolo ? <Step6StripePayment paymentCost={paymentCost} clientSecret={clientSecret} handleSoloSubmit={this.handleSoloSubmit} /> : null}
+                    {isSolo ? <Step7Complete /> : null}
+                </StepWizard>
+            }
+        }
 
         return (
-            <div class="wizard-wrapper" style={{
+            <div className="wizard-wrapper" style={{
                 backgroundImage: background,
                 backgroundSize: "auto 120%",
                 backgroundRepeat: 'no-repeat',
@@ -117,18 +194,8 @@ class TripWizard extends React.Component {
                 height: "100vh"
             }}>
                 <WizardNav startTripWizard={this.startTripWizard} />
-                <div class="step-wrapper">
-                    <StepWizard>
-                        {this.state.step === 1 ? <Step1 setIsSolo={(isSolo) => this.setState({ isSolo })} /> : ''}
-                        <Step2 />
-                        {isSolo ? <Step2bBirthday handleBirthdaySubmit={this.handleBirthdaySubmit} /> : null}
-                        <Step3 handleLocationSubmit={this.handleLocationSubmit} />
-                        {isSolo ? <Step4 handleDateChanged={this.handleDateChanged} /> :
-                            <Step4 handleDateChanged={this.handleDateChanged} handleSubmit={this.handleGroupSubmit} />}
-                        {isSolo ? <Step5LinkFlight handleLinkFlightSubmit={this.handleLinkFlightSubmit} /> : null}
-                        {isSolo ? <Step6StripePayment /> : null}
-                        {isSolo ? <Step7Complete /> : null}
-                    </StepWizard>
+                <div className="step-wrapper">
+                    {content}
                 </div>
 
             </div>

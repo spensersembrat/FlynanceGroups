@@ -9,18 +9,17 @@ import moment from 'moment';
 import 'moment/locale/en-ca';
 
 class Step4 extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   state = {
+    startDate: null,
+    endDate: null,
     error: null
   }
 
   onChange = (start, end) => {
     if (start && end && typeof start.getMonth === 'function' && typeof end.getMonth === 'function') {
-      console.log(moment(start), moment(end));
-      this.props.handleDateChanged(moment(start.getTime()).valueOf(), moment(end.getTime()).valueOf())
+      const startDate = moment(start.getTime()).valueOf();
+      const endDate = moment(end.getTime()).valueOf();
+      this.setState({ startDate, endDate });
     }
   }
 
@@ -28,23 +27,20 @@ class Step4 extends React.Component {
     event.preventDefault();
     this.setState({
       error: null
-    })
-    if (this.props.handleSubmit) {
-      this.props.handleSubmit((err, trip) => {
-        if (err) {
-          return this.setState({
-            error: true,
-          })
-        }
-        console.log(trip);
-      });
-    } else {
-      this.props.nextStep();
+    });
+    const { startDate, endDate } = this.state;
+
+    if (!startDate || !endDate) {
+      this.setState({ error: true });
+      return;
     }
+
+    this.props.handleDateSubmit(startDate, endDate);
+    this.props.nextStep();
   }
 
   render() {
-    const error = this.state.error ? <Alert variant='danger' className="mt-3">Sorry, please try again!</Alert> : '';
+    const error = this.state.error ? <Alert variant='danger' className="mt-3">Please select dates!</Alert> : '';
     return (
       <div class="container-fluid">
         <div class="row min-vh-100">

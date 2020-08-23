@@ -1,11 +1,12 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
 import illustration from '../../img/step3.png';
+import { Alert } from 'react-bootstrap';
 
 class Step5 extends React.Component {
   state = {
     flightUpload: null,
-    flightCost: 0
+    flightCost: null,
+    error: null,
   }
 
   handleUploadChange = (e) => {
@@ -20,8 +21,13 @@ class Step5 extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-
     const { flightUpload, flightCost } = this.state;
+    
+    if (flightCost === null) {
+      this.setState({ error: true });
+      return;
+    }
+
     this.props.handleLinkFlightSubmit({
       flightUpload,
       flightCost
@@ -30,8 +36,8 @@ class Step5 extends React.Component {
   }
 
   render() {
-    const { flightCost } = this.state;
-    // const error = this.state.error ? <Alert variant='danger' className="mt-3">There is an error</Alert> : '';
+    const error = this.state.error ? <Alert variant='danger' className="mt-3">Please fill in all fields!</Alert> : '';
+
     return (
       <div class="container-fluid">
         <div class="row">
@@ -51,11 +57,12 @@ class Step5 extends React.Component {
                   class="form-control step-input"
                   name="flightCost"
                   placeholder="Flight Cost"
-                  value={flightCost}
+                  step="0.01"
                   onChange={this.handleCostChange}
                 />
               </div>
               <button class="btn btn-primary-rounded">Continue</button>
+              { error }
             </form>
           </div>
           <div class="col-md-5">

@@ -18,11 +18,9 @@ class Step1 extends React.Component {
                     <div class="dropdown-content">
                       <p onClick={() => {
                         this.props.setIsSolo(false);
-                        this.props.nextStep();
                       }}>Group Trip</p>
                       <p onClick={() => {
                         this.props.setIsSolo(true);
-                        this.props.nextStep();
                       }}>Solo Trip</p>
                     </div>
                 </div>

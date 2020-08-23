@@ -1,22 +1,20 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
-import illustration from '../../img/step3.png';
 import CheckoutForm from "./CheckoutForm";
 
-const stripe_pk = 'pk_test_51H3NC3LegJFM7u3CW4Q3Z1Spuel0IYsSKcAHYOz8Nx1kmv0iRYIShmbBArJuzTbs7gkMBUmYl8DxpNcDW0OdfbB100uY7f0Lnd';
+const stripe_pk = process.env.REACT_APP_STRIPE_PK;
 const promise = loadStripe(stripe_pk);
 
-class Step5 extends React.Component {
-
-    handleSubmit = (e) => {
-        e.preventDefault();
+class Step6 extends React.Component {
+    handleSuccess = () => {
+        this.props.handleSoloSubmit();
         this.props.nextStep();
     }
 
     render() {
+        const { clientSecret, nextStep, paymentCost } = this.props;
         // const error = this.state.error ? <Alert variant='danger' className="mt-3">There is an error</Alert> : '';
         return (
             <div class="container-fluid">
@@ -27,7 +25,7 @@ class Step5 extends React.Component {
                     </div>
                     <div class="col-md-5">
                         <Elements stripe={promise}>
-                            <CheckoutForm />
+                            <CheckoutForm paymentCost={paymentCost} clientSecret={clientSecret} handleSuccess={this.handleSuccess}/>
                         </Elements>
                     </div>
                 </div>
@@ -36,4 +34,4 @@ class Step5 extends React.Component {
     }
 }
 
-export default Step5;
+export default Step6;

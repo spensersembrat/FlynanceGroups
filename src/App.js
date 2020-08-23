@@ -17,7 +17,7 @@ import Calculator from './components/Calculator';
 
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { Row, Col, Container } from 'react-bootstrap';
-import { AmplifyAuthenticator, withAuthenticator, AmplifySignUp, AmplifySignIn} from '@aws-amplify/ui-react';
+import { AmplifyAuthenticator, withAuthenticator, AmplifySignUp, AmplifySignIn } from '@aws-amplify/ui-react';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 import awsconfig from './aws-exports';
 Amplify.configure(awsconfig);
@@ -39,64 +39,64 @@ function App() {
   }, []);
 
   const flynanceApp = user ? (
-      <Dashboard />
-    ) : (
+    <Dashboard />
+  ) : (
       <Container>
         <Row>
-        <Col className="d-flex justify-content-center">
-<AmplifyAuthenticator usernameAlias="email" initialAuthState={ window.location.pathname.search('invite') > -1 ? 'signup' : 'signin' }>
-      <AmplifySignUp
-        slot="sign-up"
-        usernameAlias="email"
-        formFields={[
-          {
-            type: "email",
-            label: "Email",
-            placeholder: "Email",
-            required: true,
-          },
-          {
-            type: "password",
-            label: "Password",
-            placeholder: "Password",
-            required: true,
-          },
-          {
-            type: "custom:birthday",
-            label: "Birthday",
-            placeholder: "MM/DD/YYYY",
-            required: true,
-          },
-          {
-            type: "custom:passport_nationality",
-            label: "Passport Nationality",
-            placeholder: "Passport Nationality",
-            required: true,
-          },
-        ]}
-      />
-      <AmplifySignIn slot="sign-in" usernameAlias="email" />
-    </AmplifyAuthenticator>
-        </Col>
-      </Row>
+          <Col className="d-flex justify-content-center">
+            <AmplifyAuthenticator usernameAlias="email" initialAuthState={window.location.pathname.search('invite') > -1 ? 'signup' : 'signin'}>
+              <AmplifySignUp
+                slot="sign-up"
+                usernameAlias="email"
+                formFields={[
+                  {
+                    type: "email",
+                    label: "Email",
+                    placeholder: "Email",
+                    required: true,
+                  },
+                  {
+                    type: "password",
+                    label: "Password",
+                    placeholder: "Password",
+                    required: true,
+                  },
+                  {
+                    type: "custom:birthday",
+                    label: "Birthday",
+                    placeholder: "MM/DD/YYYY",
+                    required: true,
+                  },
+                  {
+                    type: "custom:passport_nationality",
+                    label: "Passport Nationality",
+                    placeholder: "Passport Nationality",
+                    required: true,
+                  },
+                ]}
+              />
+              <AmplifySignIn slot="sign-in" usernameAlias="email" />
+            </AmplifyAuthenticator>
+          </Col>
+        </Row>
       </Container>
 
-  );
+    );
   return (
-      <Router history={history}>
+    <Router history={history}>
       <Switch>
-      <Route exact path="/" component={TripWizard} />
-      <Route path="/Pricing" component={Pricing} />
-      <Route path="/Help" component={Help} />
-      <Route path="/Product" component={Product} />
-      <Route path='/Calculator' component={Calculator} />
+        <Route exact path="/" component={() => <TripWizard user={user} />} />
+        <Route path="/Pricing" component={Pricing} />
+        <Route path="/Help" component={Help} />
+        <Route path="/Product" component={Product} />
+        <Route path='/Calculator' component={Calculator} />
         <Route path="/app">
-              {flynanceApp}
-    </Route>
+          {flynanceApp}
+        </Route>
 
       </Switch>
 
-      </Router>
+    </Router>
   );
 }
 

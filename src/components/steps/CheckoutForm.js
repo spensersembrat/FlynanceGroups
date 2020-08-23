@@ -4,30 +4,17 @@ import {
   useStripe,
   useElements
 } from "@stripe/react-stripe-js";
-export default function CheckoutForm() {
+
+export default function CheckoutForm({ clientSecret, handleSuccess, paymentCost }) {
   const [succeeded, setSucceeded] = useState(false);
   const [error, setError] = useState(null);
   const [processing, setProcessing] = useState('');
   const [disabled, setDisabled] = useState(true);
-  const [clientSecret, setClientSecret] = useState('');
   const stripe = useStripe();
   const elements = useElements();
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
-    // window
-    //   .fetch("/create-payment-intent", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify({items: [{ id: "xl-tshirt" }]})
-    //   })
-    //   .then(res => {
-    //     return res.json();
-    //   })
-    //   .then(data => {
-    //     setClientSecret(data.clientSecret);
-    //   });
+    
   }, []);
   const cardStyle = {
     style: {
@@ -52,6 +39,7 @@ export default function CheckoutForm() {
     setDisabled(event.empty);
     setError(event.error ? event.error.message : "");
   };
+
   const handleSubmit = async ev => {
     ev.preventDefault();
     setProcessing(true);
@@ -70,6 +58,7 @@ export default function CheckoutForm() {
       setError(null);
       setProcessing(false);
       setSucceeded(true);
+      handleSuccess();
     }
   };
   return (
@@ -84,10 +73,10 @@ export default function CheckoutForm() {
       >
         <span id="button-text">
           {processing ? (
-            <div className="spinner" id="spinner"></div>
+            'Processing...'
           ) : (
-            "Pay"
-          )}
+              `Pay $${parseFloat(paymentCost).toFixed(2)}`
+            )}
         </span>
       </button>
       {/* Show any error that happens when processing the payment */}

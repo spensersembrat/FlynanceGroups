@@ -4,22 +4,25 @@ import illustration from '../../img/step2.png';
 
 class Step2b extends React.Component {
   state = {
-    birthday: 0,
+    birthday: '',
     nationality: '',
     error: null
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-
     const { birthday, nationality } = this.state;
+    if (birthday === '' || nationality === '') {
+      this.setState({ error: true });
+      return;
+    }
     this.props.handleBirthdaySubmit({ birthday, nationality });
     this.props.nextStep();
   }
 
   render() {
     const { birthday, nationality } = this.state;
-    const error = this.state.error ? <Alert variant='danger' className="mt-3">Please try again!</Alert> : '';
+    const error = this.state.error ? <Alert variant='danger' className="mt-3">Please fill in all fields!</Alert> : '';
     return (
       <div class="container-fluid">
         <div class="row">
