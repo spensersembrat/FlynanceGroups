@@ -61,6 +61,9 @@ export default function CheckoutForm({ clientSecret, handleSuccess, paymentCost 
       handleSuccess();
     }
   };
+
+  const finalPaymentCost = parseFloat(paymentCost).toFixed(2);
+  const isBelowStripeThreshold = finalPaymentCost < 0.5;
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <div className="form-group">
@@ -75,26 +78,17 @@ export default function CheckoutForm({ clientSecret, handleSuccess, paymentCost 
           {processing ? (
             'Processing...'
           ) : (
-              `Pay $${parseFloat(paymentCost).toFixed(2)}`
+              `Pay $${isBelowStripeThreshold ? `0.50 ` : finalPaymentCost}`
             )}
         </span>
       </button>
+          { isBelowStripeThreshold && <div>Stripe's minimum charge amount is 50 cents</div> }
       {/* Show any error that happens when processing the payment */}
       {error && (
         <div className="card-error" role="alert">
           {error}
         </div>
       )}
-      {/* Show a success message upon completion */}
-      <p className={succeeded ? "result-message" : "result-message hidden"}>
-        Payment succeeded, see the result in your
-        <a
-          href={`https://dashboard.stripe.com/test/payments`}
-        >
-          {" "}
-          Stripe dashboard.
-        </a> Refresh the page to pay again.
-      </p>
     </form>
   );
 }

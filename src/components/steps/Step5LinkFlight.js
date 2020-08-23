@@ -23,7 +23,7 @@ class Step5 extends React.Component {
     e.preventDefault();
     const { flightUpload, flightCost } = this.state;
     
-    if (flightCost === null) {
+    if (flightCost === null || flightUpload === null) {
       this.setState({ error: true });
       return;
     }
@@ -37,7 +37,7 @@ class Step5 extends React.Component {
 
   render() {
     const error = this.state.error ? <Alert variant='danger' className="mt-3">Please fill in all fields!</Alert> : '';
-
+    const { flightUpload } = this.state;
     return (
       <div class="container-fluid">
         <div class="row">
@@ -47,7 +47,7 @@ class Step5 extends React.Component {
             <form onSubmit={this.handleSubmit} >
               <div class="form-group">
                 <label htmlFor="file-upload" class="btn btn-secondary">
-                  Upload
+                  { flightUpload ? `${flightUpload.name} Uploaded` : 'Upload' }
                 </label>
                 <input id="file-upload" type="file" name="flightUpload" onChange={this.handleUploadChange} />
               </div>
