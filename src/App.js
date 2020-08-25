@@ -85,7 +85,7 @@ function App() {
   return (
     <Router history={history}>
       <Switch>
-        <Route exact path="/" component={() => <TripWizard user={user} />} />
+        <Route exact path="/" component={TripWizard}/>
         <Route path="/Pricing" component={Pricing} />
         <Route path="/Help" component={Help} />
         <Route path="/Product" component={Product} />

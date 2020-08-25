@@ -77,3 +77,22 @@ input[type="file"] {
 #payment-form {
     text-align: center;
 }
+
+.payment-plan-container {
+    margin: 0 -1rem;
+}
+
+.payment-plan-options {
+    padding: 1rem;
+    border: gray 1px solid;
+    border-radius: 1rem;
+    margin: 0 1rem;
+    flex-grow: 1;
+    text-align: center;
+
+    transition: border ease-in 300ms;
+}
+
+.payment-plan-options.selected {
+    border: gray 3px solid;
+}

@@ -1,22 +1,22 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
-function ConfirmEmailModal ({ show, confirmEmail, handleChange }) {
-        return (
-            <Modal
-              show={show}
-              backdrop="static"
-              keyboard={false}>
-            <Form onSubmit={confirmEmail}>
+function ConfirmEmailModal({ show, confirmEmail, handleChange }) {
+  return (
+    <Modal
+      show={show}
+      backdrop="static"
+      keyboard={false}>
+      <Form onSubmit={confirmEmail}>
         <Modal.Header>
           <Modal.Title>Check Your Email</Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex justify-content-center">
 
-            <Form.Group controlId="formBasicEmail">
-              <Form.Control className="step-input" name="code" type="text" placeholder="Enter code" onChange={handleChange} />
+          <Form.Group controlId="formBasicEmail">
+            <Form.Control className="step-input" name="code" type="text" placeholder="Enter code" onChange={handleChange} />
 
-  </Form.Group>
+          </Form.Group>
 
         </Modal.Body>
         <Modal.Footer>
@@ -24,9 +24,9 @@ function ConfirmEmailModal ({ show, confirmEmail, handleChange }) {
             Confirm Email
           </Button>
         </Modal.Footer>
-            </Form>
-      </Modal>
-        )
+      </Form>
+    </Modal>
+  )
 }
 
 export default ConfirmEmailModal;

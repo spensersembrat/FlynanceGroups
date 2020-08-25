@@ -1,7 +1,7 @@
 import React from 'react';
 import StepWizard from 'react-step-wizard';
 import history from './history';
-import { Auth, API, graphqlOperation } from 'aws-amplify';
+import { Auth, Hub } from 'aws-amplify';
 import '../css/steps.css';
 import WizardNav from './WizardNav';
 import Step1 from './steps/Step1';
@@ -15,33 +15,44 @@ import Step7Complete from './steps/Step7Complete';
 import backgroundImage from '../img/background.png';
 
 class TripWizard extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.startTripWizard = this.startTripWizard.bind(this);
-    }
-
     state = {
         travelingTo: '',
         startDate: null,
         endDate: null,
         flightUpload: null,
         flightCost: 0,
+        paymentPlan: '25',
         birthday: 0,
         nationality: '',
         clientSecret: '',
 
         isSolo: null,
+        user: null
     }
 
-    startTripWizard() {
+    componentDidMount = () => {
+        Auth.currentAuthenticatedUser()
+            .then(user => this.setState({ user }))
+            .catch(() => console.log('No signed in user.'));
+        Hub.listen('auth', data => {
+            switch (data.payload.event) {
+                case 'signIn':
+                    return this.setState({ user: data.payload.data });
+                case 'signOut':
+                default:
+                    return this.setState({ user: null });
+            }
+        });
+    }
+
+    startTripWizard = () => {
         this.setState({
             step: 2
         });
         console.log(this.state.step)
     }
 
-    handleChange(evt) {
+    handleChange = (evt) => {
         const value = evt.target.value;
         this.setState({
             ...this.state,
@@ -53,9 +64,14 @@ class TripWizard extends React.Component {
         this.setState({ birthday, nationality });
     }
 
-    handleLinkFlightSubmit = ({ flightUpload, flightCost }) => {
-        const paymentCost = flightCost / 4
-        this.setState({ flightUpload, flightCost, paymentCost });
+    handleLinkFlightSubmit = ({ flightUpload, flightCost, paymentPlan }) => {
+        let paymentCost;
+        if (paymentPlan === '25') {
+            paymentCost = flightCost * 1.15 * 0.25;
+        } else {
+            paymentCost = flightCost * 1.09 * 0.4;
+        }
+        this.setState({ flightUpload, flightCost, paymentPlan, paymentCost });
         this.generatePaymentIntent(paymentCost);
     }
 
@@ -163,10 +179,8 @@ class TripWizard extends React.Component {
 
     render() {
         const background = window.innerWidth <= 760 ? '' : 'url(' + backgroundImage + ')';
-        const { isSolo, clientSecret, paymentCost } = this.state;
-        const { user } = this.props;
+        const { isSolo, clientSecret, paymentCost, user } = this.state;
         let content;
-
         if (isSolo === null) {
             content = <Step1 setIsSolo={(isSolo) => this.setState({ isSolo })} />;
         } else {
@@ -177,7 +191,7 @@ class TripWizard extends React.Component {
                     {isSolo ? <Step2bBirthday handleBirthdaySubmit={this.handleBirthdaySubmit} /> : null}
                     <Step3 handleLocationSubmit={this.handleLocationSubmit} />
                     {isSolo ? <Step4 handleDateSubmit={this.handleDateSubmit} /> :
-                        <Step4 handleDateSubmit={this.handleGroupSubmit} handleSubmit={this.handleGroupSubmit} />}
+                        <Step4 handleDateSubmit={this.handleGroupSubmit} />}
                     {isSolo ? <Step5LinkFlight handleLinkFlightSubmit={this.handleLinkFlightSubmit} /> : null}
                     {isSolo ? <Step6StripePayment paymentCost={paymentCost} clientSecret={clientSecret} handleSoloSubmit={this.handleSoloSubmit} /> : null}
                     {isSolo ? <Step7Complete /> : null}

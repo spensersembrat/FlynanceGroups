@@ -39,51 +39,31 @@ class Step2 extends React.Component {
   //   }
   // }
 
-  confirmEmail(event) {
+  confirmEmail = async (event) => {
     event.preventDefault();
-    Auth.confirmSignUp(this.state.user.user.username, this.state.code)
-      .then(result => {
-        Auth.signIn(this.state.email, this.state.password)
-          .then(result => {
-            console.log(result)
-            Auth.currentSession()
-              .then(data => {
-                let accessToken = data.getAccessToken()
-                let jwt = accessToken.getJwtToken()
-                fetch('/api/users', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'flynance-token': jwt
-                  },
-                  body: JSON.stringify({
-                    cognito_id: result.username,
-                    email: this.state.email
-                  })
-                })
-                  .then(response => response.json())
-                  .then(data => {
-                    console.log(data)
-                    this.setState({
-                      showModal: false,
-                      code: null
-                    })
-                  });
+    try {
+      await Auth.confirmSignUp(this.state.user.user.username, this.state.code)
 
-              })
-              .catch(err => console.log(err));
+      const result = await Auth.signIn(this.state.email, this.state.password)
+      const authData = await Auth.currentSession();
 
-
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-
-  }
+      let accessToken = authData.getAccessToken()
+      let jwt = accessToken.getJwtToken()
+      await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'flynance-token': jwt
+        },
+        body: JSON.stringify({
+          cognito_id: result.username,
+          email: this.state.email
+        })
+      }).then(response => response.json());
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   async handleSubmit(event) {
     event.preventDefault();
